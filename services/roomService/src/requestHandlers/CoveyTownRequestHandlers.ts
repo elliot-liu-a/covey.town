@@ -4,6 +4,7 @@ import Player from '../types/Player';
 import { CoveyTownList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
+import {MessageData} from '../types/MessageData';
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
@@ -67,6 +68,7 @@ export interface TownDeleteRequest {
   coveyTownPassword: string;
 }
 
+
 /**
  * Payload sent by the client to update a Town.
  * N.B., JavaScript is terrible, so:
@@ -79,12 +81,21 @@ export interface TownUpdateRequest {
   isPubliclyListed?: boolean;
 }
 
+
+export interface TownAnnouncementRequest {
+  coveyTownID: string;
+  coveyTownPassword: string;
+  content:string;
+}
+
+
 export interface MessageData {
   message: string;
   receiverID: string;
   senderID: string;
   timeStamp: string;
 }
+
 
 /**
  * Envelope that wraps any response from the server
@@ -173,7 +184,16 @@ export async function townUpdateHandler(requestData: TownUpdateRequest): Promise
     response: {},
     message: !success ? 'Invalid password or update values specified. Please double check your town update password.' : undefined,
   };
+}
 
+export async function townAnnouncementHandler(requestData: TownAnnouncementRequest): Promise<ResponseEnvelope<Record<string, null>>> {
+  const townsStore = CoveyTownsStore.getInstance();
+  const success = townsStore.createAnnouncement(requestData.coveyTownID, requestData.coveyTownPassword, requestData.content);
+  return {
+    isOK: success,
+    response: {},
+    message: !success ? 'Invalid password or update values specified. Please double check your town update password.' : undefined,
+  };
 }
 
 /**
@@ -197,10 +217,17 @@ function townSocketAdapter(socket: Socket): CoveyTownListener {
       socket.emit('townClosing');
       socket.disconnect(true);
     },
+    onMessageAnnounce(content: string) {
+      // console.log(content);
+      // console.log('sending');
+      socket.emit('sendingAnnouncement', content);
+    },
     onDistributeMessage(message: MessageData) {
-      console.log('try to send out' + message);
+      // console.log('try to send out');
+      // console.log(message);
       socket.emit('playerSendMessage', message);
-    }
+    },
+
   };
 }
 
@@ -245,7 +272,7 @@ export function townSubscriptionHandler(socket: Socket): void {
   });
 
   socket.on('playerSendMessage', (message: MessageData) => {
-    console.log(message);
+    // console.log(message);
     townController.distributePlayerMessage(message);
   });
 }

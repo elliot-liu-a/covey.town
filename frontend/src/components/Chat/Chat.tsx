@@ -5,6 +5,8 @@ import 'reactjs-popup/dist/index.css';
 import Dropdown, { Option } from 'react-dropdown';
 import 'react-dropdown/style.css';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import ChatHistory from './ChatHistory';
+
 
 export default function Chat(): JSX.Element {
     const toast = useToast();
@@ -14,12 +16,16 @@ export default function Chat(): JSX.Element {
     const [receiverID, setReceiverID] = useState<string>('');
 
     const sendHandler = async () => {
-        try {           
-            const timeStamp = new Date().toString();
-            const data = {senderName: userName, senderID: myPlayerID, receiverName, receiverID, roomName: currentTownFriendlyName, roomID: currentTownID, content: message, time: timeStamp}
-            console.log(data);
-            socket?.emit('playerSendMessage', data);
-        // socket
+        try {
+          const timeStamp = new Date().toString();
+          await apiClient.sendMessage({senderName: userName, senderID: myPlayerID, receiverName, receiverID, roomName: currentTownFriendlyName, roomID: currentTownID, content: message, time: timeStamp});
+          toast({
+            title: 'Message sent',
+            status: 'success'
+          })
+          const data = {senderName: userName, senderID: myPlayerID, receiverName, receiverID, roomName: currentTownFriendlyName, roomID: currentTownID, content: message, time: timeStamp}
+          console.log(data);
+          socket?.emit('playerSendMessage', data);
         } catch (err) {
             console.log(err);
         }
@@ -38,18 +44,17 @@ export default function Chat(): JSX.Element {
     const onOptionSelected = (event: Option) => {
       const id = event.value;
       setReceiverID(id);
-      const idToName = players.find(user => user.id === id)?.userName; 
+      const idToName = players.find(user => user.id === id)?.userName;
       if(idToName){
         setReceiverName(idToName);
-        console.log(receiverName)
       }
-      console.log(receiverID);
     }
 
     return (
       <div>
-        
+
         <Popup trigger={<Button value="triggerChat">Chat</Button>} position="right center">
+          <ChatHistory coveyTownID = {currentTownID} senderID = {myPlayerID} receiverID = {receiverID}/>
           <div>
             <Input
                   id='Message'
@@ -60,7 +65,6 @@ export default function Chat(): JSX.Element {
                   value={message}
                   onChange={(event => setMessage(event.target.value))}
                 />
-            
             <Dropdown options={updatedOptions} onChange={event => onOptionSelected(event)} value={receiverName} placeholder="Select a Receiver" />
 
             <Button data-testid='sendbutton'
@@ -68,11 +72,10 @@ export default function Chat(): JSX.Element {
                     mr={3}
                     value="send"
                     onClick={sendHandler}>Send</Button>
-            <Popup trigger={<Button value="triggerHistory">View History</Button>} position="right center">
-                <div>View chat history for this userID and selected receiver</div>
-            </Popup>
           </div>
         </Popup>
       </div>
     );
-  }
+
+ }
+

@@ -12,13 +12,12 @@ export default function Announcement(): JSX.Element {
     const [password, setPassword] = useState<string>('');
 
     const publishHandler = async () => {
-        try {        
-          console.log('you clicked publish button');   
-        //  await apiClient.publishAnnouncement({coveyTownID:currentTownID,coveyTownPassword:password, content: announcement});
-        //   toast({
-        //     title: 'Announcement published',
-        //     status: 'success'
-        //   })
+        try {          
+         await apiClient.publishAnnouncement({coveyTownID:currentTownID,coveyTownPassword:password, content: announcement});
+          toast({
+            title: 'Announcement published',
+            status: 'success'
+          })
         } catch (err) {
           toast({
             title: 'Unable to publish announcement',

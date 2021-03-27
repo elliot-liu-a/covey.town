@@ -1,13 +1,20 @@
-import { nanoid } from 'nanoid';
+import {nanoid} from 'nanoid';
 import CoveyTownsStore from './CoveyTownsStore';
 import CoveyTownListener from '../types/CoveyTownListener';
 import Player from '../types/Player';
+import {MessageData} from '../types/MessageData';
 
 const mockCoveyListenerTownDestroyed = jest.fn();
 const mockCoveyListenerOtherFns = jest.fn();
 
 function mockCoveyListener(): CoveyTownListener {
   return {
+    onDistributeMessage(message: MessageData): void {
+      mockCoveyListenerOtherFns(message);
+    },
+    onMessageAnnounce(content: string): void {
+      mockCoveyListenerOtherFns(content);
+    },
     onPlayerDisconnected(removedPlayer: Player): void {
       mockCoveyListenerOtherFns(removedPlayer);
     },
@@ -72,7 +79,7 @@ describe('CoveyTownsStore', () => {
   describe('updateTown', () => {
     it('Should check the password before updating any value', () => {
       const town = createTownForTesting();
-      const { friendlyName } = town;
+      const {friendlyName} = town;
       const res = CoveyTownsStore.getInstance()
         .updateTown(town.coveyTownID, 'abcd', 'newName', true);
       expect(res)
@@ -85,7 +92,7 @@ describe('CoveyTownsStore', () => {
     });
     it('Should fail if the townID does not exist', async () => {
       const town = createTownForTesting();
-      const { friendlyName } = town;
+      const {friendlyName} = town;
 
       const res = CoveyTownsStore.getInstance()
         .updateTown('abcdef', town.townUpdatePassword, 'newName', true);
@@ -101,7 +108,7 @@ describe('CoveyTownsStore', () => {
 
       // First try with just a visiblity change
       const town = createTownForTesting();
-      const { friendlyName } = town;
+      const {friendlyName} = town;
       const res = CoveyTownsStore.getInstance()
         .updateTown(town.coveyTownID, town.townUpdatePassword, undefined, true);
       expect(res)

@@ -49,6 +49,7 @@ type MessageData = {
   content: string;
   time: string;
 };
+
 function defaultAppState(): CoveyAppState {
   return {
     nearbyPlayers: { nearbyPlayers: [] },
@@ -197,6 +198,9 @@ async function GameController(initData: TownJoinResponse,
   socket.on('disconnect', () => {
     dispatchAppUpdate({ action: 'disconnect' });
   });
+  socket.on('sendingAnnouncement',(content:string) =>{
+    alert(content);
+  });
   socket.on('playerSendMessage', (message: MessageData) => {
     if(message.roomID === video.coveyTownID){
       if(message.receiverID === gamePlayerID){
@@ -205,7 +209,7 @@ async function GameController(initData: TownJoinResponse,
       if(message.receiverID === 'Everyone'){
         dispatchAppUpdate({ action: 'playerSendPublicMessage', message });
       }
-    }   
+    }
   });
   const emitMovement = (location: UserLocation) => {
     socket.emit('playerMovement', location);

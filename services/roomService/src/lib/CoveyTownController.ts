@@ -5,7 +5,7 @@ import Player from '../types/Player';
 import PlayerSession from '../types/PlayerSession';
 import TwilioVideo from './TwilioVideo';
 import IVideoClient from './IVideoClient';
-import { MessageData } from '../requestHandlers/CoveyTownRequestHandlers';
+import {MessageData} from '../types/MessageData';
 
 const friendlyNanoID = customAlphabet('1234567890ABCDEF', 8);
 
@@ -146,6 +146,11 @@ export default class CoveyTownController {
   removeTownListener(listener: CoveyTownListener): void {
     this._listeners = this._listeners.filter((v) => v !== listener);
   }
+
+  announceToPlayers(content: string): void {
+    this._listeners.forEach((listener) => listener.onMessageAnnounce(content));
+  }
+
 
   /**
    * Fetch a player's session based on the provided session token. Returns undefined if the
