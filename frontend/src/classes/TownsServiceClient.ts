@@ -76,7 +76,9 @@ export interface TownUpdateRequest {
   isPubliclyListed?: boolean;
 }
 
-
+/**
+ * Payload sent by the client to publish an Announcement.
+ */
 export interface TownAnnouncementRequest {
   coveyTownID: string;
   coveyTownPassword: string;
@@ -113,15 +115,6 @@ export type ChatData = {
 
 export interface TownChatHistoryResponse {
   chats: ChatData[];
-}
-
-/**
- * Payload sent by the client to publish an Announcement.
- */
-export interface TownAnnouncementRequest {
-  coveyTownID: string;
-  coveyTownPassword: string;
-  content:string;
 }
 
 /**
@@ -201,10 +194,9 @@ export default class TownsServiceClient {
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
 
-  async getChatHistory(requestData: TownChatHistoryRequest): Promise<TownChatHistoryResponse>{
+  async getChatHistory(requestData: TownChatHistoryRequest): Promise<ResponseEnvelope<Array<ChatData>>>{
     const townID = requestData.coveyTownID;
     const responseWrapper = await this._axios.get(`/towns/${townID}/messages`);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
-
 }
