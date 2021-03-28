@@ -23,18 +23,17 @@ export default function ChatHistory(props: { coveyTownID: string, receiverID: st
         }
     ]);
 
-    useEffect(() => {
-        async function getChatHistory() {
-            const result = await apiClient.getChatHistory({
-                coveyTownID, receiverID, senderID
-            });
-            console.log(result);
-            // const {messages} = result;
-            // messages.sort((a,b) => a.time-b.time);
-            // setChatHistory(messages);
-        };
-        getChatHistory().then();
-    }, [apiClient])
+    // useEffect(() => {
+    //     async function getChatHistory() {
+    //         const result = await apiClient.getChatHistory({
+    //             coveyTownID, receiverID, senderID
+    //         });
+    //         const {messages} = result;
+    //         messages.sort((a,b) => a.time-b.time);
+    //         setChatHistory(messages);
+    //     };
+    //     getChatHistory().then();
+    // }, [apiClient])
 
     // useEffect(() => {
     //     async function getChatHistory() {

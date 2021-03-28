@@ -156,10 +156,10 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       state.socket?.disconnect();
       return defaultAppState();
     case 'playerSendPrivateMessage':
-      alert(`${update.message.senderName} sent you a private message`);
+      alert(update.message.senderName + update.message.receiverName + update.message.content);
       break;
     case 'playerSendPublicMessage':
-      alert(`${update.message.senderName} sent you a public message`);
+      alert(update.message.senderName + update.message.content);
       break;
     default:
       throw new Error('Unexpected state request');
