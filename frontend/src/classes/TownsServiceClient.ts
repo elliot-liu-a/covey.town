@@ -76,6 +76,7 @@ export interface TownUpdateRequest {
   isPubliclyListed?: boolean;
 }
 
+
 /**
  * Payload sent by the client to publish an Announcement.
  */
