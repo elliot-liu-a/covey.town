@@ -267,4 +267,9 @@ export function townSubscriptionHandler(socket: Socket): void {
     // console.log(message);
     townController.distributePlayerMessage(message);
   });
+
+  socket.on('sendingAnnouncement', (content: string) => {
+    // console.log(message);
+    townController.announceToPlayers(content);
+  });
 }

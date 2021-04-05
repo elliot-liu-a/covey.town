@@ -10,6 +10,7 @@ import PlayerSession from '../types/PlayerSession';
 import {townSubscriptionHandler} from '../requestHandlers/CoveyTownRequestHandlers';
 import CoveyTownsStore from './CoveyTownsStore';
 import * as TestUtils from '../client/TestUtils';
+import {MessageData} from '../types/MessageData';
 
 jest.mock('./TwilioVideo');
 
@@ -27,6 +28,19 @@ function generateTestLocation(): UserLocation {
     x: Math.floor(Math.random() * 100),
     y: Math.floor(Math.random() * 100),
   };
+}
+
+function generateTestMessage(): MessageData {
+  return {
+    senderName: "testSender",
+    senderID: `senderID-${nanoid()}`,
+    receiverName: "testReceiver",
+    receiverID: `receiverID-${nanoid()}`,
+    roomName: "testRoom",
+    roomID: `roomID-${nanoid()}`,
+    content: "Hello",
+    time: "Sun Apr 04 2021 18:25:57"
+  }
 }
 
 describe('CoveyTownController', () => {
@@ -92,6 +106,24 @@ describe('CoveyTownController', () => {
       mockListeners.forEach(listener => expect(listener.onTownDestroyed).toBeCalled());
 
     });
+
+    it('should notify added listeners of distributing message when distributePlayerMessage is called', async () => {
+      const newMessage = generateTestMessage();
+
+      mockListeners.forEach(listener => testingTown.addTownListener(listener));
+      testingTown.distributePlayerMessage(newMessage);
+      mockListeners.forEach(listener => expect(listener.onDistributeMessage).toBeCalled());
+    });
+
+    it('should notify added listeners of announcing message when announceToPlayers is called', async () => {
+      const newAnnouncement = "testAnnoucement"
+
+      mockListeners.forEach(listener => testingTown.addTownListener(listener));
+      testingTown.announceToPlayers(newAnnouncement)
+      mockListeners.forEach(listener => expect(listener.onMessageAnnounce).toBeCalled());
+    });
+
+
     it('should not notify removed listeners of player movement when updatePlayerLocation is called', async () => {
       const player = new Player('test player');
       await testingTown.addPlayer(player);
@@ -136,18 +168,42 @@ describe('CoveyTownController', () => {
       expect(listenerRemoved.onTownDestroyed).not.toBeCalled();
 
     });
+
+    it('should not notify removed listeners of distributing message when distributePlayerMessage is called', async () => {
+      const newMessage = generateTestMessage();
+
+      mockListeners.forEach(listener => testingTown.addTownListener(listener));
+      const listenerRemoved = mockListeners[1];
+      testingTown.removeTownListener(listenerRemoved);
+      testingTown.distributePlayerMessage(newMessage);
+      expect(listenerRemoved.onDistributeMessage).not.toBeCalled();
+    });
+
+    it('should not notify removed listeners of announcing message when announceToPlayers is called', async () => {
+      const newAnnouncement = "testAnnoucement"
+
+      mockListeners.forEach(listener => testingTown.addTownListener(listener));
+      const listenerRemoved = mockListeners[1];
+      testingTown.removeTownListener(listenerRemoved);
+      testingTown.announceToPlayers(newAnnouncement)
+      expect(listenerRemoved.onMessageAnnounce).not.toBeCalled();
+    });
   });
   describe('townSubscriptionHandler', () => {
     const mockSocket = mock<Socket>();
     let testingTown: CoveyTownController;
     let player: Player;
     let session: PlayerSession;
+    let newMessage: MessageData;
+    let content: string;
     beforeEach(async () => {
       const townName = `connectPlayerSocket tests ${nanoid()}`;
       testingTown = CoveyTownsStore.getInstance().createTown(townName, false);
       mockReset(mockSocket);
       player = new Player('test player');
       session = await testingTown.addPlayer(player);
+      newMessage = generateTestMessage();
+      content = 'testAnnouncement';
     });
     it('should reject connections with invalid town IDs by calling disconnect', async () => {
       TestUtils.setSessionTokenAndTownID(nanoid(), session.sessionToken, mockSocket);
@@ -186,6 +242,22 @@ describe('CoveyTownController', () => {
         expect(mockSocket.emit).toBeCalledWith('townClosing');
         expect(mockSocket.disconnect).toBeCalledWith(true);
       });
+
+
+      it('should add a town listener, which should emit "sendingAnnouncement" to the socket when a player sends an announcement', async () => {
+        TestUtils.setSessionTokenAndTownID(testingTown.coveyTownID, session.sessionToken, mockSocket);
+        townSubscriptionHandler(mockSocket);
+        testingTown.announceToPlayers(content);
+        expect(mockSocket.emit).toBeCalledWith('sendingAnnouncement', content);
+      });
+      it('should add a town listener, which should emit "playerSendMessage" to the socket when a player sends a message', async () => {
+        TestUtils.setSessionTokenAndTownID(testingTown.coveyTownID, session.sessionToken, mockSocket);
+        townSubscriptionHandler(mockSocket);
+        testingTown.distributePlayerMessage(newMessage);
+        expect(mockSocket.emit).toBeCalledWith('playerSendMessage', newMessage);
+      });
+
+
       describe('when a socket disconnect event is fired', () => {
         it('should remove the town listener for that socket, and stop sending events to it', async () => {
           TestUtils.setSessionTokenAndTownID(testingTown.coveyTownID, session.sessionToken, mockSocket);

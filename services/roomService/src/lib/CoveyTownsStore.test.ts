@@ -246,5 +246,47 @@ describe('CoveyTownsStore', () => {
         .toBe(0);
     });
   });
+
+  describe('createAnnouncement', () => {
+    it('Should check the password before publishing any announcement', () => {
+      const town = createTownForTesting();
+      const {friendlyName} = town;
+      const res = CoveyTownsStore.getInstance()
+        .createAnnouncement(town.coveyTownID, nanoid(), 'newAnnouncement');
+      expect(res)
+        .toBe(false);
+      expect(town.friendlyName)
+        .toBe(friendlyName);
+      expect(town.isPubliclyListed)
+        .toBe(false);
+    });
+
+    it('Should send announcement to all listeners', async () => {
+      const town = createTownForTesting();
+      town.addTownListener(mockCoveyListener());
+      town.addTownListener(mockCoveyListener());
+      town.addTownListener(mockCoveyListener());
+      town.addTownListener(mockCoveyListener());
+      town.announceToPlayers('testAnnouncement1');
+      town.announceToPlayers('testAnnouncement2');
+
+      expect(mockCoveyListenerOtherFns.mock.calls.length)
+        .toBe(8);
+      expect(mockCoveyListenerTownDestroyed.mock.calls.length)
+        .toBe(0);
+    });
+
+    it('Should send announcements with correct contents', async () => {
+      const town = createTownForTesting();
+      town.addTownListener(mockCoveyListener());
+      town.announceToPlayers('testAnnouncement1');
+      town.announceToPlayers('testAnnouncement2');
+
+      expect(mockCoveyListenerOtherFns.mock.calls[0].toString())
+        .toBe('testAnnouncement1');
+      expect(mockCoveyListenerOtherFns.mock.calls[1].toString())
+        .toBe('testAnnouncement2')
+    });
+  });
 });
 
