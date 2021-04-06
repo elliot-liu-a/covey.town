@@ -59,6 +59,8 @@ function defaultAppState(): CoveyAppState {
     },
     apiClient: new TownsServiceClient(),
     toastContent: '',
+    annoChange: false,
+    privateChange: false,
   };
 }
 function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyAppState {
@@ -76,6 +78,8 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     emitMovement: state.emitMovement,
     apiClient: state.apiClient,
     toastContent: state.toastContent,
+    annoChange: state.annoChange,
+    privateChange: state.privateChange,
   };
 
   function calculateNearbyPlayers(players: Player[], currentLocation: UserLocation) {
@@ -151,14 +155,16 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     case 'playerSendPrivateMessage':
       // alert(`${update.message.senderName} sent you a private message`);
       nextState.toastContent = `${update.message.senderName} sent you a private message`;
+      nextState.privateChange = !nextState.privateChange;
       break;
-    case 'playerSendPublicMessage':
-      // alert(`${update.message.senderName} sent you a public message`);
-      nextState.toastContent = `${update.message.senderName} sent you a public message`;
-      break;
+    // case 'playerSendPublicMessage':
+    //   // alert(`${update.message.senderName} sent you a public message`);
+    //   // nextState.toastContent = `${update.message.senderName} sent you a public message`;
+    //   break;
     case 'playerSendAnnouncement':
       // alert(`${update.message.senderName} sent you a public message`);
       nextState.toastContent = `Announcement: ${update.content}`;
+      nextState.annoChange = !nextState.annoChange;
       break;
     default:
       throw new Error('Unexpected state request');
@@ -234,7 +240,6 @@ async function GameController(initData: TownJoinResponse,
 
 function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefined>> }) {
   const [appState, dispatchAppUpdate] = useReducer(appStateReducer, defaultAppState());
-
   const setupGameController = useCallback(async (initData: TownJoinResponse) => {
     await GameController(initData, dispatchAppUpdate);
     return true;
@@ -250,13 +255,15 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
   }, [dispatchAppUpdate, setOnDisconnect]);
 
   const toast = useToast();
-  if(appState.toastContent !== ''){
-    toast({
-      title: appState.toastContent,
-      status: 'success'
-    })
-  }
-  
+  useEffect(() => {
+    if(appState.toastContent !== ''){
+      toast({
+        title: appState.toastContent,
+        status: 'success'
+      })
+    }
+  }, [appState.toastContent, dispatchAppUpdate, toast, appState.annoChange, appState.privateChange])
+
 
   const page = useMemo(() => {
     if (!appState.sessionToken) {
