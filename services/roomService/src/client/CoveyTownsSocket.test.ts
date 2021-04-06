@@ -1,6 +1,6 @@
 import Express from 'express';
 import CORS from 'cors';
-import http from 'http';
+import * as http from 'http';
 import { nanoid } from 'nanoid';
 import { AddressInfo } from 'net';
 import * as TestUtils from './TestUtils';
@@ -17,15 +17,15 @@ type TestTownData = {
 
 function generateTestMessage(): MessageData {
   return {
-    senderName: "testSender",
+    senderName: 'testSender',
     senderID: `senderID-${nanoid()}`,
-    receiverName: "testReceiver",
+    receiverName: 'testReceiver',
     receiverID: `receiverID-${nanoid()}`,
-    roomName: "testRoom",
+    roomName: 'testRoom',
     roomID: `roomID-${nanoid()}`,
-    content: "Hello",
-    time: "Sun Apr 04 2021 18:25:57"
-  }
+    content: 'Hello',
+    time: 'Sun Apr 04 2021 18:25:57',
+  };
 }
 
 describe('TownServiceApiSocket', () => {
