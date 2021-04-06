@@ -54,6 +54,8 @@ function wrappedTownSettings() {
     },
     apiClient: new TownsServiceClient(),
     toastContent: '',
+    annoChange: false,
+    privateChange: false,
   }}>
     <TownSettings/></CoveyAppContext.Provider></ChakraProvider>;
 }
