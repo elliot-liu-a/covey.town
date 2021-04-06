@@ -48,13 +48,14 @@ The frontend will automatically re-compile and reload in your browser if you cha
 
 ### Deployed Application Endpoint
 1. Frontend Url: `https://quirky-jepsen-9e46b9.netlify.app`
-2. Backend Url: `https://cs5500-project.herokuapp.com/`
-
+   - Link: [Netlify Web App](https://quirky-jepsen-9e46b9.netlify.app)
+2. Backend Url: `https://cs5500-project.herokuapp.com`
+   - - Link: [Heroku App](https://cs5500-project.herokuapp.com)
 ###### Added Restful Endpoints
 1. Create a new message for an exisiting room
    - Method: Post
-   -Endpoint: `https://dashboard.heroku.com/apps/cs5500-project`
-   -Request Body: senderName: req.body.senderName,
+   - Endpoint: `https://cs5500-project.herokuapp.com/messages`
+   - Request Body: senderName: req.body.senderName,
         senderID: req.body.senderID,
         receiverName: req.body.receiverName,
         receiverID: req.body.receiverID,
@@ -62,7 +63,9 @@ The frontend will automatically re-compile and reload in your browser if you cha
         roomID: req.body.roomID,
         content: req.body.content,
         time: req.body.time,
- 2.
+ 2. Retrieve the chat history for a specific town
+     - Method : Get
+     - Endpoint: `https://cs5500-project.herokuapp.com/towns/:townID/messages`
 
 
 ## New Features
