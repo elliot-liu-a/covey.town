@@ -8,18 +8,18 @@
 1. Create a new message for an exisiting room.
    - Method: `Post`
    - Endpoint: `https://cs5500-project.herokuapp.com/messages`
-   - Request Body: \senderName: req.body.senderName,\
+   - Request Body: \ senderName: req.body.senderName,\
         senderID: req.body.senderID,\
         receiverName: req.body.receiverName,\
         receiverID: req.body.receiverID,\
         roomName: req.body.roomName,\
         roomID: req.body.roomID,\
         content: req.body.content,\
-        time: req.body.time,\
+        time: req.body.time
  2. Retrieve the chat history for a specific town
      - Method : `Get`
      - Endpoint: `https://cs5500-project.herokuapp.com/towns/:townID/messages`
-     - 
+
 ### Frontend
 1. Added a chat panel to the right side of the map for user to have public and private chat with other players.
 2. Added an button for user to publish announcement to all players in the room.
