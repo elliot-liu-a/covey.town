@@ -4,7 +4,7 @@
 1. Added MongoDB to store chat history for each room.
 2. Added services for sending announcements and chat messages.
 
-##### Method to access data using MongoDBCompass
+##### Method to access data using MongoDB Compass
 ![MongoDB Compass](MongoDBCompass.PNG)
 
 Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mongodb.net/test?authSource=admin&replicaSet=Cluster0-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true`
@@ -22,9 +22,12 @@ Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mon
         roomID: `roomID`\
         content: `content`\
         time: `time`
- 2. Retrieve the chat history for a specific town
+ 2. Retrieve the chat history for a specific town.
      - Method : `Get`
      - Endpoint: `https://cs5500-project.herokuapp.com/towns/:townID/messages`
+ 
+##### Added Socket Action Listeners
+1. Announcement 
 
 ### Frontend
 1. Added a chat panel to the right side of the map for user to have public and private chat with other players.
