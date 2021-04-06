@@ -47,9 +47,9 @@ In the `frontend` directory, run `npm start` (again, you'll need to run `npm ins
 The frontend will automatically re-compile and reload in your browser if you change any files in the `frontend/src` directory.
 
 ### Deployed Application Endpoint
-1.Frontend Url: `https://quirky-jepsen-9e46b9.netlify.app`
+1. Frontend Url: `https://quirky-jepsen-9e46b9.netlify.app`
    - Link: [Netlify Web App](https://quirky-jepsen-9e46b9.netlify.app)
-2.Backend Url: `https://cs5500-project.herokuapp.com`
+2. Backend Url: `https://cs5500-project.herokuapp.com`
    - Link: [Heroku App](https://cs5500-project.herokuapp.com)
 
 ## New Features
