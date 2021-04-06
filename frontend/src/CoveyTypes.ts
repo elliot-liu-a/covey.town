@@ -29,4 +29,6 @@ export type CoveyAppState = {
   socket: Socket | null,
   apiClient: TownsServiceClient,
   toastContent: string,
+  annoChange: boolean,
+  privateChange: boolean,
 };
