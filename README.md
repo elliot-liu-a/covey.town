@@ -48,7 +48,7 @@ The frontend will automatically re-compile and reload in your browser if you cha
 
 
 ## New Features
-Details: [New Features](FEATURE.md)
+Details: [New Features](FEATURES.md)
 ### Backend
 1. Added MongoDB to store chat history for each room.
 2. Added services for sending announcements and chat messages.
