@@ -28,4 +28,7 @@ export type CoveyAppState = {
   emitMovement: (location: UserLocation) => void,
   socket: Socket | null,
   apiClient: TownsServiceClient,
+  toastContent: string,
+  annoChange: boolean,
+  privateChange: boolean,
 };

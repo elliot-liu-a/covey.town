@@ -4,7 +4,7 @@ import React, {
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, useToast } from '@chakra-ui/react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import assert from 'assert';
 import WorldMap from './components/world/WorldMap';
@@ -38,6 +38,7 @@ type CoveyAppUpdate =
   | { action: 'disconnect' }
   | { action: 'playerSendPrivateMessage'; message: MessageData }
   | { action: 'playerSendPublicMessage'; message: MessageData }
+  | { action: 'playerSendAnnouncement'; content: string }
   ;
 
 function defaultAppState(): CoveyAppState {
@@ -57,6 +58,9 @@ function defaultAppState(): CoveyAppState {
     emitMovement: () => {
     },
     apiClient: new TownsServiceClient(),
+    toastContent: '',
+    annoChange: false,
+    privateChange: false,
   };
 }
 function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyAppState {
@@ -73,6 +77,9 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     socket: state.socket,
     emitMovement: state.emitMovement,
     apiClient: state.apiClient,
+    toastContent: state.toastContent,
+    annoChange: state.annoChange,
+    privateChange: state.privateChange,
   };
 
   function calculateNearbyPlayers(players: Player[], currentLocation: UserLocation) {
@@ -146,10 +153,18 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       state.socket?.disconnect();
       return defaultAppState();
     case 'playerSendPrivateMessage':
-      alert(`${update.message.senderName} sent you a private message`);
+      // alert(`${update.message.senderName} sent you a private message`);
+      nextState.toastContent = `${update.message.senderName} sent you a private message`;
+      nextState.privateChange = !nextState.privateChange;
       break;
-    case 'playerSendPublicMessage':
-      alert(`${update.message.senderName} sent you a public message`);
+    // case 'playerSendPublicMessage':
+    //   // alert(`${update.message.senderName} sent you a public message`);
+    //   // nextState.toastContent = `${update.message.senderName} sent you a public message`;
+    //   break;
+    case 'playerSendAnnouncement':
+      // alert(`${update.message.senderName} sent you a public message`);
+      nextState.toastContent = `Announcement: ${update.content}`;
+      nextState.annoChange = !nextState.annoChange;
       break;
     default:
       throw new Error('Unexpected state request');
@@ -189,7 +204,7 @@ async function GameController(initData: TownJoinResponse,
     dispatchAppUpdate({ action: 'disconnect' });
   });
   socket.on('sendingAnnouncement',(content:string) =>{
-    alert(content);
+    dispatchAppUpdate({ action: 'playerSendAnnouncement', content });
   });
   socket.on('playerSendMessage', (message: MessageData) => {
     if(message.roomID === video.coveyTownID){
@@ -225,7 +240,6 @@ async function GameController(initData: TownJoinResponse,
 
 function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefined>> }) {
   const [appState, dispatchAppUpdate] = useReducer(appStateReducer, defaultAppState());
-
   const setupGameController = useCallback(async (initData: TownJoinResponse) => {
     await GameController(initData, dispatchAppUpdate);
     return true;
@@ -239,6 +253,17 @@ function App(props: { setOnDisconnect: Dispatch<SetStateAction<Callback | undefi
       return Video.teardown();
     });
   }, [dispatchAppUpdate, setOnDisconnect]);
+
+  const toast = useToast();
+  useEffect(() => {
+    if(appState.toastContent !== ''){
+      toast({
+        title: appState.toastContent,
+        status: 'success'
+      })
+    }
+  }, [appState.toastContent, dispatchAppUpdate, toast, appState.annoChange, appState.privateChange])
+
 
   const page = useMemo(() => {
     if (!appState.sessionToken) {

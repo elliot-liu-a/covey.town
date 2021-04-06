@@ -285,7 +285,7 @@ describe('CoveyTownsStore', () => {
       expect(mockCoveyListenerOtherFns.mock.calls[0].toString())
         .toBe('testAnnouncement1');
       expect(mockCoveyListenerOtherFns.mock.calls[1].toString())
-        .toBe('testAnnouncement2')
+        .toBe('testAnnouncement2');
     });
   });
 });
