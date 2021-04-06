@@ -49,7 +49,9 @@ The frontend will automatically re-compile and reload in your browser if you cha
 
 ## New Features
 ### Backend
+1. Added MongoDB to store chat history for each room.
+2. Added services for sending announcements and chat messages.
 
 ### Frontend
-1. Added a chat panel on the right side of the map for user to have public and private chat with other players.
+1. Added a chat panel to the right side of the map for user to have public and private chat with other players.
 2. Added an button for user to publish announcement to all players in the room.
