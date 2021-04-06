@@ -4,6 +4,10 @@
 1. Added MongoDB to store chat history for each room.
 2. Added services for sending announcements and chat messages.
 
+###### Method to access data in MongoDB cluster
+[MongoDB Compass](MongoDBCompass.PNG)
+
+
 ###### Added Restful Endpoints
 1. Create a new message for an exisiting room.
    - Method: `Post`
