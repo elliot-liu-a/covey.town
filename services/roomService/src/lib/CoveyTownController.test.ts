@@ -32,15 +32,15 @@ function generateTestLocation(): UserLocation {
 
 function generateTestMessage(): MessageData {
   return {
-    senderName: "testSender",
+    senderName: 'testSender',
     senderID: `senderID-${nanoid()}`,
-    receiverName: "testReceiver",
+    receiverName: 'testReceiver',
     receiverID: `receiverID-${nanoid()}`,
-    roomName: "testRoom",
+    roomName: 'testRoom',
     roomID: `roomID-${nanoid()}`,
-    content: "Hello",
-    time: "Sun Apr 04 2021 18:25:57"
-  }
+    content: 'Hello',
+    time: 'Sun Apr 04 2021 18:25:57',
+  };
 }
 
 describe('CoveyTownController', () => {
@@ -116,10 +116,10 @@ describe('CoveyTownController', () => {
     });
 
     it('should notify added listeners of announcing message when announceToPlayers is called', async () => {
-      const newAnnouncement = "testAnnoucement"
+      const newAnnouncement = 'testAnnoucement';
 
       mockListeners.forEach(listener => testingTown.addTownListener(listener));
-      testingTown.announceToPlayers(newAnnouncement)
+      testingTown.announceToPlayers(newAnnouncement);
       mockListeners.forEach(listener => expect(listener.onMessageAnnounce).toBeCalled());
     });
 
@@ -180,12 +180,12 @@ describe('CoveyTownController', () => {
     });
 
     it('should not notify removed listeners of announcing message when announceToPlayers is called', async () => {
-      const newAnnouncement = "testAnnoucement"
+      const newAnnouncement = 'testAnnoucement';
 
       mockListeners.forEach(listener => testingTown.addTownListener(listener));
       const listenerRemoved = mockListeners[1];
       testingTown.removeTownListener(listenerRemoved);
-      testingTown.announceToPlayers(newAnnouncement)
+      testingTown.announceToPlayers(newAnnouncement);
       expect(listenerRemoved.onMessageAnnounce).not.toBeCalled();
     });
   });

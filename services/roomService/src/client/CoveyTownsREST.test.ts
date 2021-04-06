@@ -1,6 +1,6 @@
 import Express from 'express';
 import CORS from 'cors';
-import http from 'http';
+import * as http from 'http';
 import { nanoid } from 'nanoid';
 import assert from 'assert';
 import { AddressInfo } from 'net';
