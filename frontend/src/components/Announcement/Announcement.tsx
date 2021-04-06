@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
+import '../Chat/ChatPanel.css';
 
 
 export default function Announcement(): JSX.Element {
@@ -28,9 +29,8 @@ export default function Announcement(): JSX.Element {
       }
 
     return (
-      <div>
-        
-        <Popup contentStyle={{width: "50%"}} trigger={<Button style = {{color: "green", backgroundColor: "#a3d3ca", border: "1px solid #34aca4"}} value="trigger"> Publish an Announcement</Button>} position="right center">
+      <div className="Announcement-button">
+        <Popup contentStyle={{width: "50%"}} trigger={<Button style = {{color: "green", backgroundColor: "#a3d3ca", border: "1px solid #34aca4"}} value="trigger"> Publish an Announcement</Button>} position="bottom center">
           <div>
             <Input
                   id='Announcement'

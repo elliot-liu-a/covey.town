@@ -1,0 +1,17 @@
+.Chat-panel {
+    top: 0;
+    left: 1025px;
+    width: 35%;
+    height: 70%;
+    position: absolute;
+  }
+
+.Send-button {
+    float: right;
+}
+
+.Announcement-button {
+    top: 730px;
+    left: 1035px;
+    position: absolute;
+}

@@ -1,11 +1,12 @@
 import { Button, Input, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Dropdown, { Option } from 'react-dropdown';
 import 'react-dropdown/style.css';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import ChatHistory from './ChatHistory';
+import './ChatPanel.css';
+
 
 
 export default function Chat(): JSX.Element {
@@ -55,28 +56,28 @@ export default function Chat(): JSX.Element {
 
     return (
       <div>
-
-        <Popup contentStyle={{width: "50%"}} trigger={<Button style = {{color: "#b98043", backgroundColor: "#f8ddb2", border: "1px solid"}} value="triggerChat">Chat</Button>} position="left center">
+        <div className ="Chat-panel">
           <ChatHistory coveyTownID = {currentTownID} componentSenderID = {myPlayerID} componentReceiverID = {receiverID || 'Everyone'}/>
-          <div>
-            <Input
-                  id='Message'
-                  placeholder="Message"
-                  name="message"
-                  type='text'
-                  pattern="[^\s]+"
-                  value={message}
-                  onChange={(event => setMessage(event.target.value))}
-                />
-            <Dropdown options={updatedOptions} onChange={event => onOptionSelected(event)} value={receiverName || 'Everyone'} placeholder="Select a Receiver" />
+            <div>
+              <Input
+                    id='Message'
+                    placeholder="Message"
+                    name="message"
+                    type='text'
+                    pattern="[^\s]+"
+                    value={message}
+                    onChange={(event => setMessage(event.target.value))}
+                  />
+              <Dropdown options={updatedOptions} onChange={event => onOptionSelected(event)} value={receiverName || 'Everyone'} placeholder="Select a Receiver" />
 
-            <Button data-testid='sendbutton'
-                    colorScheme="orange"
-                    mr={3}
-                    value="send"
-                    onClick={sendHandler}>Send</Button>
-          </div>
-        </Popup>
+              <Button data-testid='sendbutton'
+                      className='Send-button'
+                      colorScheme="orange"
+                      mr={3}
+                      value="send"
+                      onClick={sendHandler}>Send</Button>
+            </div>
+        </div>
       </div>
     );
 
