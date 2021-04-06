@@ -4,7 +4,7 @@
 1. Added MongoDB to store chat history for each room.
 2. Added services for sending announcements and chat messages.
 
-##### Method to access data in MongoDB cluster
+##### Method to access data using MongoDBCompass
 ![MongoDB Compass](MongoDBCompass.PNG)
 
 Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mongodb.net/test?authSource=admin&replicaSet=Cluster0-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true`
