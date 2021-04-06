@@ -45,3 +45,17 @@ Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWN
 
 In the `frontend` directory, run `npm start` (again, you'll need to run `npm install` the very first time). After several moments (or minutes, depending on the speed of your machine), a browser will open with the frontend running locally.
 The frontend will automatically re-compile and reload in your browser if you change any files in the `frontend/src` directory.
+
+
+## New Features
+Details: [New Features](FEATURES.md)
+### Backend
+1. Added MongoDB to store chat history for each room.
+2. Added services for sending announcements and chat messages.
+
+### Frontend
+1. Added a chat panel to the right side of the map for user to have public and private chat with other players.
+2. Added an button for user to publish announcement to all players in the room.
+
+## DESIGN
+Details: [DESIGN](DESIGN.md)
