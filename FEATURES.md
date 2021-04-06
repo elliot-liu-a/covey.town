@@ -4,11 +4,12 @@
 1. Added MongoDB to store chat history for each room.
 2. Added services for sending announcements and chat messages.
 
-###### Method to access data in MongoDB cluster
+##### Method to access data in MongoDB cluster
 ![MongoDB Compass](MongoDBCompass.PNG)
 
+Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mongodb.net/test?authSource=admin&replicaSet=Cluster0-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true`
 
-###### Added Restful Endpoints
+##### Added Restful Endpoints
 1. Create a new message for an exisiting room.
    - Method: `Post`
    - Endpoint: `https://cs5500-project.herokuapp.com/messages`
