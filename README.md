@@ -46,6 +46,24 @@ Create a `.env` file in the `frontend` directory, with the line: `REACT_APP_TOWN
 In the `frontend` directory, run `npm start` (again, you'll need to run `npm install` the very first time). After several moments (or minutes, depending on the speed of your machine), a browser will open with the frontend running locally.
 The frontend will automatically re-compile and reload in your browser if you change any files in the `frontend/src` directory.
 
+### Deployed Application Endpoint
+1. Frontend Url: `https://quirky-jepsen-9e46b9.netlify.app`
+2. Backend Url: `https://cs5500-project.herokuapp.com/`
+
+###### Added Restful Endpoints
+1. Create a new message for an exisiting room
+   -Method: Post
+   -Endpoint: `https://dashboard.heroku.com/apps/cs5500-project`
+   -Request Body: senderName: req.body.senderName,
+        senderID: req.body.senderID,
+        receiverName: req.body.receiverName,
+        receiverID: req.body.receiverID,
+        roomName: req.body.roomName,
+        roomID: req.body.roomID,
+        content: req.body.content,
+        time: req.body.time,
+ 2.
+
 
 ## New Features
 Details: [New Features](FEATURES.md)
