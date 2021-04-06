@@ -5,7 +5,7 @@
 2. Added services for sending announcements and chat messages.
 
 ###### Method to access data in MongoDB cluster
-[MongoDB Compass](MongoDBCompass.PNG)
+![MongoDB Compass](MongoDBCompass.PNG)
 
 
 ###### Added Restful Endpoints
