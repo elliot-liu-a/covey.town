@@ -52,7 +52,7 @@ The frontend will automatically re-compile and reload in your browser if you cha
 
 ###### Added Restful Endpoints
 1. Create a new message for an exisiting room
-   -Method: Post
+   - Method: Post
    -Endpoint: `https://dashboard.heroku.com/apps/cs5500-project`
    -Request Body: senderName: req.body.senderName,
         senderID: req.body.senderID,
