@@ -47,9 +47,9 @@ In the `frontend` directory, run `npm start` (again, you'll need to run `npm ins
 The frontend will automatically re-compile and reload in your browser if you change any files in the `frontend/src` directory.
 
 
-### New Features
-## Backend
+## New Features
+### Backend
 
-## Frontend
+### Frontend
 1. Added a chat panel on the right side of the map for user to have public and private chat with other players.
 2. Added an button for user to publish announcement to all players in the room.
