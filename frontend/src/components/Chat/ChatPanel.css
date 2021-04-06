@@ -2,7 +2,8 @@
     top: 0;
     left: 1025px;
     width: 35%;
-    height: 70%;
+    height: 700px;
+    z-index: 0;
     position: absolute;
   }
 
@@ -13,5 +14,6 @@
 .Announcement-button {
     top: 730px;
     left: 1035px;
+    z-index: 1;
     position: absolute;
 }
