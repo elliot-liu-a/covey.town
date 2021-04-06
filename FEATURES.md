@@ -8,7 +8,7 @@
 1. Create a new message for an exisiting room.
    - Method: `Post`
    - Endpoint: `https://cs5500-project.herokuapp.com/messages`
-   - Request Body: \  
+   - Request Body: \
         senderName: `senderName`\
         senderID: `senderID`\
         receiverName: `receiverName`\
