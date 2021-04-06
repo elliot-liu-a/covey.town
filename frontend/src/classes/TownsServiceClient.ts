@@ -187,7 +187,6 @@ export default class TownsServiceClient {
   }
 
   async sendMessage(requestData: TownSendMessageRequest): Promise<ResponseEnvelope<Record<string, null>>> {
-    console.log(requestData);
     const responseWrapper = await this._axios.post('/messages', requestData);
     return TownsServiceClient.unwrapOrThrowError(responseWrapper);
   }
