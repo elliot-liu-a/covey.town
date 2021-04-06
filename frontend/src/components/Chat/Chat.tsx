@@ -25,10 +25,13 @@ export default function Chat(): JSX.Element {
             status: 'success'
           })
           const data = {senderName: userName, senderID: myPlayerID, receiverName, receiverID, roomName: currentTownFriendlyName, roomID: currentTownID, content: message, time: timeStamp}
-          console.log(data);
           socket?.emit('playerSendMessage', data);
         } catch (err) {
-            console.log(err);
+          toast({
+            title: 'Unable to send message',
+            description: err.toString(),
+            status: 'error'
+          })
         }
       }
 

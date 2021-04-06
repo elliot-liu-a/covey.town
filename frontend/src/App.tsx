@@ -153,16 +153,12 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       state.socket?.disconnect();
       return defaultAppState();
     case 'playerSendPrivateMessage':
-      // alert(`${update.message.senderName} sent you a private message`);
       nextState.toastContent = `${update.message.senderName} sent you a private message`;
       nextState.privateChange = !nextState.privateChange;
       break;
     case 'playerSendPublicMessage':
-      // alert(`${update.message.senderName} sent you a public message`);
-      // nextState.toastContent = `${update.message.senderName} sent you a public message`;
       break;
     case 'playerSendAnnouncement':
-      // alert(`${update.message.senderName} sent you a public message`);
       nextState.toastContent = `Announcement: ${update.content}`;
       nextState.annoChange = !nextState.annoChange;
       break;

@@ -1,4 +1,4 @@
-import React,{ FC, useCallback, useEffect, useState } from 'react';
+import React,{ useCallback, useEffect, useState } from 'react';
 import useCoveyAppState from '../../hooks/useCoveyAppState';
 import { MessageData } from './MessageData';
 import './ChatHistory.css';
