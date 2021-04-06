@@ -48,7 +48,7 @@ The frontend will automatically re-compile and reload in your browser if you cha
 
 ### Deployed Application Endpoint
 Frontend Url: `https://quirky-jepsen-9e46b9.netlify.app`
-   - Link: [Netlify Web App](https://quirky-jepsen-9e46b9.netlify.app)
+   - Link: [Netlify Web App](https://quirky-jepsen-9e46b9.netlify.app)\
 Backend Url: `https://cs5500-project.herokuapp.com`
    - Link: [Heroku App](https://cs5500-project.herokuapp.com)
 
