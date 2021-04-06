@@ -100,6 +100,8 @@ function wrappedTownSelection() {
     },
     apiClient: new TownsServiceClient(),
     toastContent: '',
+    annoChange: false,
+    privateChange: false,
   }}>
     <TownSelection doLogin={doLoginMock}/></CoveyAppContext.Provider></ChakraProvider>;
 }
