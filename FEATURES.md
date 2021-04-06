@@ -3,19 +3,19 @@
 ### Backend
 1. Added MongoDB to store chat history for each room.
 2. Added services for sending announcements and chat messages.
-3. 
+
 ###### Added Restful Endpoints
 1. Create a new message for an exisiting room.
    - Method: `Post`
    - Endpoint: `https://cs5500-project.herokuapp.com/messages`
-   - Request Body: senderName: req.body.senderName,
-        senderID: req.body.senderID,
-        receiverName: req.body.receiverName,
-        receiverID: req.body.receiverID,
-        roomName: req.body.roomName,
-        roomID: req.body.roomID,
-        content: req.body.content,
-        time: req.body.time,
+   - Request Body: \senderName: req.body.senderName,\
+        senderID: req.body.senderID,\
+        receiverName: req.body.receiverName,\
+        receiverID: req.body.receiverID,\
+        roomName: req.body.roomName,\
+        roomID: req.body.roomID,\
+        content: req.body.content,\
+        time: req.body.time,\
  2. Retrieve the chat history for a specific town
      - Method : `Get`
      - Endpoint: `https://cs5500-project.herokuapp.com/towns/:townID/messages`
