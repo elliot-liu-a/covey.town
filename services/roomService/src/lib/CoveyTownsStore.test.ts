@@ -2,7 +2,7 @@ import {nanoid} from 'nanoid';
 import CoveyTownsStore from './CoveyTownsStore';
 import CoveyTownListener from '../types/CoveyTownListener';
 import Player from '../types/Player';
-import { NotificationRequest } from '../types/NotificationRequest';
+import {NotificationRequest} from '../types/NotificationRequest';
 
 const mockCoveyListenerTownDestroyed = jest.fn();
 const mockCoveyListenerOtherFns = jest.fn();

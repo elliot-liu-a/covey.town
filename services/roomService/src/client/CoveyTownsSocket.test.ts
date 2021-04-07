@@ -15,18 +15,18 @@ type TestTownData = {
   isPubliclyListed: boolean, townUpdatePassword: string
 };
 
-function generateTestMessage(): MessageData {
-  return {
-    senderName: 'testSender',
-    senderID: `senderID-${nanoid()}`,
-    receiverName: 'testReceiver',
-    receiverID: `receiverID-${nanoid()}`,
-    roomName: 'testRoom',
-    roomID: `roomID-${nanoid()}`,
-    content: 'Hello',
-    time: 'Sun Apr 04 2021 18:25:57',
-  };
-}
+// function generateTestMessage(): MessageData {
+//   return {
+//     senderName: 'testSender',
+//     senderID: `senderID-${nanoid()}`,
+//     receiverName: 'testReceiver',
+//     receiverID: `receiverID-${nanoid()}`,
+//     roomName: 'testRoom',
+//     roomID: `roomID-${nanoid()}`,
+//     content: 'Hello',
+//     time: 'Sun Apr 04 2021 18:25:57',
+//   };
+// }
 
 describe('TownServiceApiSocket', () => {
   let server: http.Server;

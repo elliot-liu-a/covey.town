@@ -11,7 +11,7 @@ import {townSubscriptionHandler} from '../requestHandlers/CoveyTownRequestHandle
 import CoveyTownsStore from './CoveyTownsStore';
 import * as TestUtils from '../client/TestUtils';
 import {MessageData} from '../types/MessageData';
-import { NotificationRequest } from '../types/NotificationRequest';
+import {NotificationRequest} from '../types/NotificationRequest';
 
 jest.mock('./TwilioVideo');
 
