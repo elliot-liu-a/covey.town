@@ -5,6 +5,7 @@ import { CoveyTownList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
 import MessageController, { TownChatHistoryResponse } from '../data/controllers/message.controller';
+import { NotificationRequest } from '../types/NotificationRequest';
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
@@ -101,12 +102,6 @@ export interface TownPostMessageRequest {
 
 export interface TownGetMessageRequest {
   townID: string
-}
-
-export interface NotificationRequest {
-  coveyTownID: string;
-  content:string;
-  receiverID: string;
 }
 
 /**

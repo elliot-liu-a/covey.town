@@ -105,4 +105,3 @@ export function setSessionTokenAndTownID(coveyTownID: string, sessionToken: stri
   // eslint-disable-next-line
   socket.handshake.auth = {token: sessionToken, coveyTownID};
 }
-
