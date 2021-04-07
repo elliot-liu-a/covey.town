@@ -11,6 +11,8 @@ import {
   townSubscriptionHandler,
   townUpdateHandler,
   townAnnouncementHandler,
+  townPostMessageHandler,
+  townGetMessageHandler,
 } from '../requestHandlers/CoveyTownRequestHandlers';
 import { logError } from '../Utils';
 
@@ -20,9 +22,7 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
 
   app.post('/messages', BodyParser.json(), async (req, res) => {
     try {
-      // console.log(req.body);
-      // console.log('This is from router');
-      const result = await MessageController.createMessage({
+      const result = await townPostMessageHandler({
         senderName: req.body.senderName,
         senderID: req.body.senderID,
         receiverName: req.body.receiverName,
@@ -46,7 +46,7 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
 
   app.get('/towns/:townID/messages', BodyParser.json(), async (req, res) => {
     try {
-      const result = await MessageController.getMessagesForRoom(req.params.townID);
+      const result = await townGetMessageHandler({townID: req.params.townID});
       res.status(StatusCodes.OK)
         .json(result);
     } catch (err) {

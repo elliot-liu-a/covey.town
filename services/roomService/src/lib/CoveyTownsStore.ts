@@ -1,5 +1,6 @@
 import CoveyTownController from './CoveyTownController';
 import { CoveyTownList } from '../CoveyTypes';
+import { TownPostMessageRequest } from '../requestHandlers/CoveyTownRequestHandlers';
 
 function passwordMatches(provided: string, expected: string): boolean {
   if (provided === expected) {
@@ -72,8 +73,33 @@ export default class CoveyTownsStore {
 
   createAnnouncement(coveyTownID: string, coveyTownPassword: string, content: string):boolean {
     const existingTown = this.getControllerForTown(coveyTownID);
+    const notificationRequest = {
+      coveyTownID: coveyTownID,
+      content:content,
+      receiverID: 'Everyone',
+    }
     if (existingTown && passwordMatches(coveyTownPassword, existingTown.townUpdatePassword)) {
-      existingTown.announceToPlayers(content);
+      existingTown.announceToPlayers(notificationRequest);
+      return true;
+    }
+    return false;
+  }
+
+  createNotification(message: TownPostMessageRequest ):boolean {
+    const existingTown = this.getControllerForTown(message.roomID);
+    let content = '';
+    if(message.receiverID === 'Everyone') {
+      content = `${message.senderName} send you a public message`
+    }else {
+      content = `${message.senderName} send you a private message`
+    }
+    const notificationRequest = {
+      coveyTownID: message.roomID,
+      content:content,
+      receiverID: message.receiverID,
+    }
+    if (existingTown) {
+      existingTown.announceToPlayers(notificationRequest);
       return true;
     }
     return false;

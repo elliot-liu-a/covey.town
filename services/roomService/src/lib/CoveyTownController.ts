@@ -6,6 +6,7 @@ import PlayerSession from '../types/PlayerSession';
 import TwilioVideo from './TwilioVideo';
 import IVideoClient from './IVideoClient';
 import {MessageData} from '../types/MessageData';
+import { NotificationRequest } from '../requestHandlers/CoveyTownRequestHandlers';
 
 const friendlyNanoID = customAlphabet('1234567890ABCDEF', 8);
 
@@ -123,10 +124,6 @@ export default class CoveyTownController {
     this._listeners.forEach((listener) => listener.onPlayerMoved(player));
   }
 
-  distributePlayerMessage(message: MessageData): void {
-    this._listeners.forEach((listener) => listener.onDistributeMessage(message));
-  }
-
   /**
    * Subscribe to events from this town. Callers should make sure to
    * unsubscribe when they no longer want those events by calling removeTownListener
@@ -147,8 +144,8 @@ export default class CoveyTownController {
     this._listeners = this._listeners.filter((v) => v !== listener);
   }
 
-  announceToPlayers(content: string): void {
-    this._listeners.forEach((listener) => listener.onMessageAnnounce(content));
+  announceToPlayers(notificationRequest: NotificationRequest): void {
+    this._listeners.forEach((listener) => listener.onMessageAnnounce(notificationRequest));
   }
 
 

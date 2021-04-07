@@ -1,5 +1,5 @@
 import Player from './Player';
-import {MessageData} from './MessageData';
+import { NotificationRequest } from '../requestHandlers/CoveyTownRequestHandlers';
 
 /**
  * A listener for player-related events in each town
@@ -17,8 +17,6 @@ export default interface CoveyTownListener {
    */
   onPlayerMoved(movedPlayer: Player): void;
 
-  onDistributeMessage(message: MessageData): void;
-
   /**
    * Called when a player disconnects from the town
    * @param removedPlayer the player that disconnected
@@ -30,9 +28,7 @@ export default interface CoveyTownListener {
    */
   onTownDestroyed(): void;
 
-
-
-  onMessageAnnounce(content: string): void;
+  onMessageAnnounce(notificationRequest: NotificationRequest): void;
 
 
 }
