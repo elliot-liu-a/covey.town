@@ -26,8 +26,9 @@ Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mon
      - Method : `Get`
      - Endpoint: `https://cs5500-project.herokuapp.com/towns/:townID/messages`
  
-##### Added Socket Action Listeners
-1. Announcement 
+##### Added Socket Event Listeners
+1. onMessageAnnounce(content: string) : notify all listeners the new announcement.
+2. onDistributeMessage(message: MessageData): Retrieve the message received by the server and ditribute it. 
 
 ### Frontend
 1. Added a chat panel to the right side of the map for user to have public and private chat with other players.
