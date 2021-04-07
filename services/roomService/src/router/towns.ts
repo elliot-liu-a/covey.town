@@ -3,7 +3,6 @@ import BodyParser from 'body-parser';
 import io from 'socket.io';
 import { Server } from 'http';
 import { StatusCodes } from 'http-status-codes';
-import MessageController from '../data/controllers/message.controller';
 import {
   townCreateHandler, townDeleteHandler,
   townJoinHandler,

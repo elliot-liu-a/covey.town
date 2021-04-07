@@ -4,7 +4,6 @@ import Player from '../types/Player';
 import { CoveyTownList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
-import {MessageData} from '../types/MessageData';
 import MessageController, { TownChatHistoryResponse } from '../data/controllers/message.controller';
 
 /**
@@ -220,10 +219,10 @@ export async function townPostMessageHandler(requestData: TownPostMessageRequest
     content: requestData.content,
     time: requestData.time,
   });
-  if(success.isOK) {
+  if (success.isOK) {
     // send notification to socket
     const townsStore = CoveyTownsStore.getInstance();
-    const res = townsStore.createNotification(requestData);
+    townsStore.createNotification(requestData);
     return success;
   }
   return {
@@ -241,7 +240,7 @@ export async function townGetMessageHandler(requestData: TownGetMessageRequest):
   return {
     isOK: false,
     message: 'Unable to get chat history, please try later.',
-  }
+  };
 }
 
 /**

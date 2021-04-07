@@ -1,5 +1,10 @@
 import Player from './Player';
-import { NotificationRequest } from '../requestHandlers/CoveyTownRequestHandlers';
+
+export interface NotificationRequest {
+  coveyTownID: string;
+  content:string;
+  receiverID: string;
+}
 
 /**
  * A listener for player-related events in each town

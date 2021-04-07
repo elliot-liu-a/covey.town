@@ -1,6 +1,16 @@
 import CoveyTownController from './CoveyTownController';
 import { CoveyTownList } from '../CoveyTypes';
-import { TownPostMessageRequest } from '../requestHandlers/CoveyTownRequestHandlers';
+
+export interface TownPostMessageRequest {
+  senderName: string,
+  senderID: string,
+  receiverName: string,
+  receiverID: string,
+  roomName: string,
+  roomID: string,
+  content: string,
+  time: string,
+}
 
 function passwordMatches(provided: string, expected: string): boolean {
   if (provided === expected) {
@@ -74,10 +84,10 @@ export default class CoveyTownsStore {
   createAnnouncement(coveyTownID: string, coveyTownPassword: string, content: string):boolean {
     const existingTown = this.getControllerForTown(coveyTownID);
     const notificationRequest = {
-      coveyTownID: coveyTownID,
-      content:content,
+      coveyTownID,
+      content,
       receiverID: 'Everyone',
-    }
+    };
     if (existingTown && passwordMatches(coveyTownPassword, existingTown.townUpdatePassword)) {
       existingTown.announceToPlayers(notificationRequest);
       return true;
@@ -88,16 +98,16 @@ export default class CoveyTownsStore {
   createNotification(message: TownPostMessageRequest ):boolean {
     const existingTown = this.getControllerForTown(message.roomID);
     let content = '';
-    if(message.receiverID === 'Everyone') {
-      content = `${message.senderName} send you a public message`
-    }else {
-      content = `${message.senderName} send you a private message`
+    if (message.receiverID === 'Everyone') {
+      content = `${message.senderName} send you a public message`;
+    } else {
+      content = `${message.senderName} send you a private message`;
     }
     const notificationRequest = {
       coveyTownID: message.roomID,
-      content:content,
+      content,
       receiverID: message.receiverID,
-    }
+    };
     if (existingTown) {
       existingTown.announceToPlayers(notificationRequest);
       return true;
