@@ -4,15 +4,15 @@
 ![High Level Architecture](docs/NewHighLevelArchitecture-2.png)
 
 ## UI changes
-User will be able to publish an announcement, send message, and view chat history. <br/>
+* User will be able to publish an announcement, send message, and view chat history. <br/>
 
-When user enter the town, on the right side of world map, user should be able to see the chat history, a message content input, a user name dropdown, a 'Publish an Announcement' button and a 'send' button. <br/>
+* When user enter the town, on the right side of world map, user should be able to see the chat history, a message content input, a user name dropdown, a 'Publish an Announcement' button and a 'send' button. <br/>
 
-If user click 'Publish an Announcement' button, a popup component should come out. The popup component should be consist of a content input, a password input and a 'Publish Announcement' button. Once user type in input, password, and click the button, all the user in the same town should be able to see a toast 'Announcement: ...' with the announcement content, and the current user should also see a toast saying 'Announcement published'. <br/>
+* If user click 'Publish an Announcement' button, a popup component should come out. The popup component should be consist of a content input, a password input and a 'Publish Announcement' button. Once user type in input, password, and click the button, all the user in the same town should be able to see a toast 'Announcement: ...' with the announcement content, and the current user should also see a toast saying 'Announcement published'. <br/>
 
-If user type in message content, select a receiver name, and click the 'send' button, the user should see a toast saying 'Message sent'. And the user should be able to see the message in the chat history. The corresponding receiver should see a toast saying '... send you a private/ public message'. If the receiver select the sender name in the dropdown, the message content should be shown in the chat history. <br/>
+* If user type in message content, select a receiver name, and click the 'send' button, the user should see a toast saying 'Message sent'. And the user should be able to see the message in the chat history. The corresponding receiver should see a toast saying '... send you a private/ public message'. If the receiver select the sender name in the dropdown, the message content should be shown in the chat history. <br/>
 
-The chat history will be automatically updated every 1 second. The message content will be marked orange if current user is sender, and blue if not. <br/>
+* The chat history will be automatically updated every 1 second. The message content will be marked orange if current user is sender, and blue if not. <br/>
 
 ## TownsServiceClient API 
 * publishAnnouncement(requestData: TownAnnouncementRequest):
