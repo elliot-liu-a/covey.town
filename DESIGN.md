@@ -26,8 +26,7 @@
 To enable user receive toast as announcement/ message notification, the socket will listen on 'sendingAnnouncement' and 'playerSendMessage'. Once it was triggered, it will dispatch corresponding actions. 
 
 ## appStateReducer
-* For 'playerSendPrivateMessage' and 'playerSendPublicMessage' action, send toast to corresponding receiver (every user in town if it's public message) with sender's name.<br/>
-* For 'playerSendAnnouncement' action, send toat to every user in town with announcement content.
+* For 'playerSendAnnouncement' action, send toast to corresponding user in town with announcement content.
 
 ## Rationale for code change
 #### To enable chat between users, there are 3 options: <br/>
@@ -67,7 +66,14 @@ Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mon
  2. Retrieve the chat history for a specific town.
      - Method : `Get`
      - Endpoint: `https://cs5500-project.herokuapp.com/towns/:townID/messages`
- 
+ 3. Create a new announcement for an exisiting room.
+     - Method : `Post`
+     - Endpoint: `https://cs5500-project.herokuapp.com/announcement`
+     - Request Body: \
+        coveyTownID: `coveyTownID`\
+        coveyTownPassword: `coveyTownPassword`\
+        content: `content`\
+       
 #### Added Socket Event Listeners
 1. `onMessageAnnounce(notificationRequest :NotificationRequest)` : notify all listeners the new announcement or the new message is sent.
 
