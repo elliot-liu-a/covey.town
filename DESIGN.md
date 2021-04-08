@@ -72,7 +72,7 @@ Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mon
      - Request Body: \
         coveyTownID: `coveyTownID`\
         coveyTownPassword: `coveyTownPassword`\
-        content: `content`\
+        content: `content`
        
 #### Added Socket Event Listeners
 1. `onMessageAnnounce(notificationRequest :NotificationRequest)` : notify all listeners the new announcement or the new message is sent.
