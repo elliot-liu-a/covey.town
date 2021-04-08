@@ -41,3 +41,32 @@ To enable user receive toast as announcement/ message notification, the socket w
 * The first option use socket on both way, but is not safe for private message: if malicious user listen to the socket, the private message will be leaked. Also, we want to show the user their chat history, so we make POST/ GET request to server to store/ fetch data in backend, thus we prefer option 2 and 3. <br/>
 * The second option might be redundant: after storing message in database, server could directly distribute the notification to receiver. There is no need for the sender to send message to server again. <br/>
 * Also, the third option could reuse the code for 'playerSendAnnouncement action' to notify the receiver. <br/>
+### Backend
+1. Added MongoDB to store chat history for each room.
+2. Added services for sending announcements and chat messages.
+
+##### Method to access data using MongoDB Compass
+![MongoDB Compass](MongoDBCompass.PNG)
+
+Connection String: `mongodb+srv://yichangliumongodb:123456qaz@cluster0-ozaxq.mongodb.net/test?authSource=admin&replicaSet=Cluster0-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true`
+
+##### Added Restful Endpoints
+1. Create a new message for an exisiting room.
+   - Method: `Post`
+   - Endpoint: `https://cs5500-project.herokuapp.com/messages`
+   - Request Body: \
+        senderName: `senderName`\
+        senderID: `senderID`\
+        receiverName: `receiverName`\
+        receiverID: `receiverID`\
+        roomName: `roomName`\
+        roomID: `roomID`\
+        content: `content`\
+        time: `time`
+ 2. Retrieve the chat history for a specific town.
+     - Method : `Get`
+     - Endpoint: `https://cs5500-project.herokuapp.com/towns/:townID/messages`
+ 
+##### Added Socket Event Listeners
+1. `onMessageAnnounce(content: string)` : notify all listeners the new announcement.
+2. `onDistributeMessage(message: MessageData)`: Retrieve the message received by the server and ditribute it. 
