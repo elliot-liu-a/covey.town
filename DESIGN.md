@@ -42,9 +42,6 @@ To enable user receive toast as announcement/ message notification, the socket w
 * Also, the third option could reuse the code for 'playerSendAnnouncement action' to notify the receiver. <br/>
 
 ## Backend
-1. Added MongoDB to store chat history for each room.
-2. Added services for sending announcements and chat messages.
-
 #### Method to access data using MongoDB Compass
 ![MongoDB Compass](MongoDBCompass.PNG)
 
