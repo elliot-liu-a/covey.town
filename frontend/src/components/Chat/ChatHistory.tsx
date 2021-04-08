@@ -10,7 +10,6 @@ export default function ChatHistory(props: { coveyTownID: string, componentRecei
     const [chatHistory, setChatHistory] = useState<MessageData[]>();
 
     const updateChatHistory = useCallback(() => {
-        // console.log(apiClient);
         apiClient.getChatHistory({coveyTownID})
           .then((chats) => {
             setChatHistory(chats.chats);

@@ -36,10 +36,14 @@ type CoveyAppUpdate =
   | { action: 'playerDisconnect'; player: Player }
   | { action: 'weMoved'; location: UserLocation }
   | { action: 'disconnect' }
-  | { action: 'playerSendPrivateMessage'; message: MessageData }
-  | { action: 'playerSendPublicMessage'; message: MessageData }
   | { action: 'playerSendAnnouncement'; content: string }
   ;
+
+  export interface NotificationRequest {
+    coveyTownID: string;
+    content:string;
+    receiverID: string;
+  }
 
 function defaultAppState(): CoveyAppState {
   return {
@@ -152,12 +156,6 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
     case 'disconnect':
       state.socket?.disconnect();
       return defaultAppState();
-    case 'playerSendPrivateMessage':
-      nextState.toastContent = `${update.message.senderName} sent you a private message`;
-      nextState.privateChange = !nextState.privateChange;
-      break;
-    case 'playerSendPublicMessage':
-      break;
     case 'playerSendAnnouncement':
       nextState.toastContent = `Announcement: ${update.content}`;
       nextState.annoChange = !nextState.annoChange;
@@ -199,16 +197,13 @@ async function GameController(initData: TownJoinResponse,
   socket.on('disconnect', () => {
     dispatchAppUpdate({ action: 'disconnect' });
   });
-  socket.on('sendingAnnouncement',(content:string) =>{
-    dispatchAppUpdate({ action: 'playerSendAnnouncement', content });
-  });
-  socket.on('playerSendMessage', (message: MessageData) => {
-    if(message.roomID === video.coveyTownID){
-      if(message.receiverID === gamePlayerID){
-        dispatchAppUpdate({ action: 'playerSendPrivateMessage', message });
-      }
-      if(message.receiverID === 'Everyone'){
-        dispatchAppUpdate({ action: 'playerSendPublicMessage', message });
+  socket.on('sendingAnnouncement',(notificationRequest: NotificationRequest) =>{
+    const {content} = notificationRequest;
+    if(notificationRequest.coveyTownID === video.coveyTownID){
+      if(notificationRequest.receiverID === gamePlayerID){       
+        dispatchAppUpdate({ action: 'playerSendAnnouncement', content });
+      } else if (notificationRequest.receiverID === 'Everyone') {
+        dispatchAppUpdate({ action: 'playerSendAnnouncement', content });
       }
     }
   });

@@ -1,6 +1,11 @@
 import {CreateQuery} from 'mongoose';
 import Message, {IMessage} from '../models/message.server';
-import {ResponseEnvelope} from '../../requestHandlers/CoveyTownRequestHandlers';
+
+export interface ResponseEnvelope<T> {
+  isOK: boolean;
+  message?: string;
+  response?: T;
+}
 
 async function createMessage({
   senderName,

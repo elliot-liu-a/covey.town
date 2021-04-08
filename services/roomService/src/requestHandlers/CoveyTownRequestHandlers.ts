@@ -4,7 +4,8 @@ import Player from '../types/Player';
 import { CoveyTownList, UserLocation } from '../CoveyTypes';
 import CoveyTownListener from '../types/CoveyTownListener';
 import CoveyTownsStore from '../lib/CoveyTownsStore';
-import {MessageData} from '../types/MessageData';
+import MessageController, { TownChatHistoryResponse } from '../data/controllers/message.controller';
+import {NotificationRequest} from '../types/NotificationRequest';
 
 /**
  * The format of a request to join a Town in Covey.Town, as dispatched by the server middleware
@@ -88,6 +89,20 @@ export interface TownAnnouncementRequest {
   content:string;
 }
 
+export interface TownPostMessageRequest {
+  senderName: string,
+  senderID: string,
+  receiverName: string,
+  receiverID: string,
+  roomName: string,
+  roomID: string,
+  content: string,
+  time: string,
+}
+
+export interface TownGetMessageRequest {
+  townID: string
+}
 
 /**
  * Envelope that wraps any response from the server
@@ -188,6 +203,41 @@ export async function townAnnouncementHandler(requestData: TownAnnouncementReque
   };
 }
 
+export async function townPostMessageHandler(requestData: TownPostMessageRequest): Promise<ResponseEnvelope<Record<string, null>>> {
+  const success = await MessageController.createMessage({
+    senderName: requestData.senderName,
+    senderID: requestData.senderID,
+    receiverName: requestData.receiverName,
+    receiverID: requestData.receiverID,
+    roomName: requestData.roomName,
+    roomID: requestData.roomID,
+    content: requestData.content,
+    time: requestData.time,
+  });
+  if (success.isOK) {
+    // send notification to socket
+    const townsStore = CoveyTownsStore.getInstance();
+    townsStore.createNotification(requestData);
+    return success;
+  }
+  return {
+    isOK: success.isOK,
+    response: {},
+    message: 'Unable to send message, please try later.',
+  };
+
+  
+}
+
+export async function townGetMessageHandler(requestData: TownGetMessageRequest): Promise<ResponseEnvelope<TownChatHistoryResponse>> {
+  const success = await MessageController.getMessagesForRoom(requestData.townID);
+  if (success.isOK) return success;
+  return {
+    isOK: false,
+    message: 'Unable to get chat history, please try later.',
+  };
+}
+
 /**
  * An adapter between CoveyTownController's event interface (CoveyTownListener)
  * and the low-level network communication protocol
@@ -209,15 +259,8 @@ function townSocketAdapter(socket: Socket): CoveyTownListener {
       socket.emit('townClosing');
       socket.disconnect(true);
     },
-    onMessageAnnounce(content: string) {
-      // console.log(content);
-      // console.log('sending');
-      socket.emit('sendingAnnouncement', content);
-    },
-    onDistributeMessage(message: MessageData) {
-      // console.log('try to send out');
-      // console.log(message);
-      socket.emit('playerSendMessage', message);
+    onMessageAnnounce(notificationRequest :NotificationRequest) {
+      socket.emit('sendingAnnouncement', notificationRequest);
     },
 
   };
@@ -263,13 +306,4 @@ export function townSubscriptionHandler(socket: Socket): void {
     townController.updatePlayerLocation(s.player, movementData);
   });
 
-  socket.on('playerSendMessage', (message: MessageData) => {
-    // console.log(message);
-    townController.distributePlayerMessage(message);
-  });
-
-  socket.on('sendingAnnouncement', (content: string) => {
-    // console.log(message);
-    townController.announceToPlayers(content);
-  });
 }
