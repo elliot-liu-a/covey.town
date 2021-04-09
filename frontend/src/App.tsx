@@ -27,7 +27,6 @@ import TownsServiceClient, { TownJoinResponse } from './classes/TownsServiceClie
 import Video from './classes/Video/Video';
 import Announcement from './components/Announcement/Announcement';
 import Chat from './components/Chat/Chat';
-import { MessageData } from './components/Chat/MessageData';
 
 type CoveyAppUpdate =
   | { action: 'doConnect'; data: { userName: string, townFriendlyName: string, townID: string,townIsPubliclyListed:boolean, sessionToken: string, myPlayerID: string, socket: Socket, players: Player[], emitMovement: (location: UserLocation) => void } }
@@ -157,7 +156,7 @@ function appStateReducer(state: CoveyAppState, update: CoveyAppUpdate): CoveyApp
       state.socket?.disconnect();
       return defaultAppState();
     case 'playerSendAnnouncement':
-      nextState.toastContent = `Announcement: ${update.content}`;
+      nextState.toastContent = update.content;
       nextState.annoChange = !nextState.annoChange;
       break;
     default:
