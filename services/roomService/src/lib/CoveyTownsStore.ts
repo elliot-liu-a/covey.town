@@ -85,7 +85,7 @@ export default class CoveyTownsStore {
     const existingTown = this.getControllerForTown(coveyTownID);
     const notificationRequest = {
       coveyTownID,
-      content,
+      content: `Announcement: ${content}`,
       receiverID: 'Everyone',
     };
     if (existingTown && passwordMatches(coveyTownPassword, existingTown.townUpdatePassword)) {
@@ -99,9 +99,9 @@ export default class CoveyTownsStore {
     const existingTown = this.getControllerForTown(message.roomID);
     let content = '';
     if (message.receiverID === 'Everyone') {
-      content = `${message.senderName} send you a public message`;
+      content = `Notification: ${message.senderName} send you a public message`;
     } else {
-      content = `${message.senderName} send you a private message`;
+      content = `Notification: ${message.senderName} send you a private message`;
     }
     const notificationRequest = {
       coveyTownID: message.roomID,
