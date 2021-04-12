@@ -29,6 +29,10 @@ export default interface CoveyTownListener {
    */
   onTownDestroyed(): void;
 
+
+  /**
+   * Called when a message or an notification is sent.
+   */
   onMessageNotify(notificationRequest: NotificationRequest): void;
 
 

@@ -82,12 +82,19 @@ export interface TownUpdateRequest {
   isPubliclyListed?: boolean;
 }
 
+/**
+ * Payload sent by the client to create an announcement.
+ */
 
 export interface TownAnnouncementRequest {
   coveyTownID: string;
   coveyTownPassword: string;
   content:string;
 }
+
+/**
+ * Payload sent by the client to send a new message.
+ */
 
 export interface TownPostMessageRequest {
   senderName: string,
@@ -99,6 +106,11 @@ export interface TownPostMessageRequest {
   content: string,
   time: string,
 }
+
+
+/**
+ * Payload sent by the client to retrieve the chat history.
+ */
 
 export interface TownGetMessageRequest {
   townID: string
@@ -226,7 +238,7 @@ export async function townPostMessageHandler(requestData: TownPostMessageRequest
     message: 'Unable to send message, please try later.',
   };
 
-  
+
 }
 
 export async function townGetMessageHandler(requestData: TownGetMessageRequest): Promise<ResponseEnvelope<TownChatHistoryResponse>> {

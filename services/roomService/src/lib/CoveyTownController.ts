@@ -144,6 +144,11 @@ export default class CoveyTownController {
     this._listeners = this._listeners.filter((v) => v !== listener);
   }
 
+  /**
+   * Notify all players in the current room.
+    * @param notificationRequest the room information and content of the notification.
+   */
+
   notificationToPlayers(notificationRequest: NotificationRequest): void {
     this._listeners.forEach((listener) => listener.onMessageNotify(notificationRequest));
   }

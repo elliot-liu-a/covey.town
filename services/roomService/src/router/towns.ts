@@ -17,7 +17,9 @@ import { logError } from '../Utils';
 
 export default function addTownRoutes(http: Server, app: Express): io.Server {
 
-
+  /**
+   * Create a new message.
+   */
 
   app.post('/messages', BodyParser.json(), async (req, res) => {
     try {
@@ -41,6 +43,10 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
         });
     }
   });
+
+  /**
+   * Retrieve the chat history for a certain room.
+   */
 
 
   app.get('/towns/:townID/messages', BodyParser.json(), async (req, res) => {
@@ -153,6 +159,9 @@ export default function addTownRoutes(http: Server, app: Express): io.Server {
     }
   });
 
+  /**
+   * Create an announcement
+   */
 
   app.post('/announcement', BodyParser.json(), async (req, res) => {
     try {
