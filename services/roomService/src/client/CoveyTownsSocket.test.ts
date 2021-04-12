@@ -8,7 +8,6 @@ import * as TestUtils from './TestUtils';
 import { UserLocation } from '../CoveyTypes';
 import TownsServiceClient from './TownsServiceClient';
 import addTownRoutes from '../router/towns';
-import {MessageData} from '../types/MessageData';
 
 type TestTownData = {
   friendlyName: string, coveyTownID: string,
@@ -91,34 +90,27 @@ describe('TownServiceApiSocket', () => {
     expect(movedPlayer.location).toMatchObject(newLocation);
     expect(otherMovedPlayer.location).toMatchObject(newLocation);
   });
-  // it('Dispatches announcement updates to all clients in the same town', async () => {
-  //   const town = await createTownForTesting();
-  //   const joinData = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
-  //   const joinData2 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
-  //   const joinData3 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
-  //   const socketSender = TestUtils.createSocketClient(server, joinData.coveySessionToken, town.coveyTownID).socket;
-  //   const {messageAnnounce: announcementReceiver1} = TestUtils.createSocketClient(server, joinData2.coveySessionToken, town.coveyTownID);
-  //   const {messageAnnounce: announcementReceiver2} = TestUtils.createSocketClient(server, joinData3.coveySessionToken, town.coveyTownID);
-  //   const newAnnouncement = 'testContent';
-  //   socketSender.emit('sendingAnnouncement', newAnnouncement);
-  //   const [announcement1, announcement2]= await Promise.all([announcementReceiver1, announcementReceiver2]);
-  //   expect(announcement1).toBe(newAnnouncement);
-  //   expect(announcement2).toBe(newAnnouncement);
-  // });
-  // it('Dispatches chat message updates to all clients in the same town', async () => {
-  //   const town = await createTownForTesting();
-  //   const joinData = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
-  //   const joinData2 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
-  //   const joinData3 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
-  //   const socketSender = TestUtils.createSocketClient(server, joinData.coveySessionToken, town.coveyTownID).socket;
-  //   const {distributeMessage: messageReceiver1} = TestUtils.createSocketClient(server, joinData2.coveySessionToken, town.coveyTownID);
-  //   const {distributeMessage: messageReceiver2} = TestUtils.createSocketClient(server, joinData3.coveySessionToken, town.coveyTownID);
-  //   const newMessage = generateTestMessage();
-  //   socketSender.emit('playerSendMessage', newMessage);
-  //   const [receivedMessage, otherReceivedMessage]= await Promise.all([messageReceiver1, messageReceiver2]);
-  //   expect(receivedMessage).toMatchObject(newMessage);
-  //   expect(otherReceivedMessage).toMatchObject(newMessage);
-  // });
+
+  // newly added test for notification
+  it('Dispatches notification updates to all clients in the same town', async () => {
+    const town = await createTownForTesting();
+    const joinData = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
+    const joinData2 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
+    const joinData3 = await apiClient.joinTown({coveyTownID: town.coveyTownID, userName: nanoid()});
+    const socketSender = TestUtils.createSocketClient(server, joinData.coveySessionToken, town.coveyTownID).socket;
+    const {notificationSent: notificationReceiver1} = TestUtils.createSocketClient(server, joinData2.coveySessionToken, town.coveyTownID);
+    const {notificationSent: notificationReceiver2} = TestUtils.createSocketClient(server, joinData3.coveySessionToken, town.coveyTownID);
+    const newNotification = {
+      coveyTownID: town.coveyTownID,
+      content:'testAnnoucement',
+      receiverID: 'Everyone',
+    };
+    socketSender.emit('sendingNotification', newNotification);
+    const [notification1, notification2]= await Promise.all([notificationReceiver1, notificationReceiver2]);
+    expect(notification1).toStrictEqual(newNotification);
+    expect(notification2).toStrictEqual(newNotification);
+  });
+
   it('Invalidates the user session after disconnection', async () => {
     // This test will timeout if it fails - it will never reach the expectation
     const town = await createTownForTesting();

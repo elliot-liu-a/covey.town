@@ -9,10 +9,7 @@ const mockCoveyListenerOtherFns = jest.fn();
 
 function mockCoveyListener(): CoveyTownListener {
   return {
-    // onDistributeMessage(message: MessageData): void {
-    //   mockCoveyListenerOtherFns(message);
-    // },
-    onMessageAnnounce(notificationRequest: NotificationRequest): void {
+    onMessageNotify(notificationRequest: NotificationRequest): void {
       mockCoveyListenerOtherFns(notificationRequest);
     },
     onPlayerDisconnected(removedPlayer: Player): void {
@@ -247,20 +244,22 @@ describe('CoveyTownsStore', () => {
     });
   });
 
+  // Newly added test for createAnnouncement function
   describe('createAnnouncement', () => {
     it('Should check the password before publishing any announcement', () => {
       const town = createTownForTesting();
       const {friendlyName} = town;
-      const res = CoveyTownsStore.getInstance()
+      const res1 = CoveyTownsStore.getInstance()
         .createAnnouncement(town.coveyTownID, nanoid(), 'newAnnouncement');
-      expect(res)
+      const res2 = CoveyTownsStore.getInstance()
+        .createAnnouncement(town.coveyTownID, town.townUpdatePassword, 'newAnnouncement');
+      expect(res1)
         .toBe(false);
+      expect(res2)
+        .toBe(true);
       expect(town.friendlyName)
         .toBe(friendlyName);
-      expect(town.isPubliclyListed)
-        .toBe(false);
     });
-
     it('Should send announcement to all listeners', async () => {
       const town = createTownForTesting();
       const newAnnouncement1 = {
@@ -277,15 +276,14 @@ describe('CoveyTownsStore', () => {
       town.addTownListener(mockCoveyListener());
       town.addTownListener(mockCoveyListener());
       town.addTownListener(mockCoveyListener());
-      town.announceToPlayers(newAnnouncement1);
-      town.announceToPlayers(newAnnouncement2);
+      town.notificationToPlayers(newAnnouncement1);
+      town.notificationToPlayers(newAnnouncement2);
 
       expect(mockCoveyListenerOtherFns.mock.calls.length)
         .toBe(8);
       expect(mockCoveyListenerTownDestroyed.mock.calls.length)
         .toBe(0);
     });
-
     it('Should send announcements with correct contents', async () => {
       const town = createTownForTesting();
       const newAnnouncement1 = {
@@ -299,12 +297,94 @@ describe('CoveyTownsStore', () => {
         receiverID: 'Everyone',
       };
       town.addTownListener(mockCoveyListener());
-      town.announceToPlayers(newAnnouncement1);
-      town.announceToPlayers(newAnnouncement2);
+      town.notificationToPlayers(newAnnouncement1);
+      town.notificationToPlayers(newAnnouncement2);
       expect(mockCoveyListenerOtherFns.mock.calls[0][0])
         .toBe(newAnnouncement1);
       expect(mockCoveyListenerOtherFns.mock.calls[1][0])
         .toBe(newAnnouncement2);
+    });
+  });
+
+
+  // Newly added test for createNotification function
+  describe('createNotification', () => {
+    it('Should send notification to all listeners', async () => {
+      const town = createTownForTesting();
+      const newMessage1 = {
+        senderName: 'testSender1',
+        senderID: `senderID-${nanoid()}`,
+        receiverName: 'testReceiver1',
+        receiverID: `receiverID-${nanoid()}`,
+        roomName: 'testRoom',
+        roomID: town.coveyTownID,
+        content: 'Hello',
+        time: 'Sun Apr 04 2021 18:25:57',
+      };
+      const newMessage2 = {
+        senderName: 'testSender2',
+        senderID: `senderID-${nanoid()}`,
+        receiverName: 'testReceiver2',
+        receiverID: `receiverID-${nanoid()}`,
+        roomName: 'testRoom',
+        roomID: town.coveyTownID,
+        content: 'Hello',
+        time: 'Sun Apr 04 2021 18:25:57',
+      };
+      town.addTownListener(mockCoveyListener());
+      town.addTownListener(mockCoveyListener());
+      town.addTownListener(mockCoveyListener());
+      town.addTownListener(mockCoveyListener());
+      CoveyTownsStore.getInstance()
+        .createNotification(newMessage1);
+      CoveyTownsStore.getInstance()
+        .createNotification(newMessage2);
+      expect(mockCoveyListenerOtherFns.mock.calls.length)
+        .toBe(8);
+      expect(mockCoveyListenerTownDestroyed.mock.calls.length)
+        .toBe(0);
+    });
+    it('Should send notification with correct contents and receiverID', async () => {
+      const town = createTownForTesting();
+      const newMessage1 = {
+        senderName: 'testSender1',
+        senderID: `senderID-${nanoid()}`,
+        receiverName: 'testReceiver1',
+        receiverID: 'Everyone',
+        roomName: 'testRoom',
+        roomID: town.coveyTownID,
+        content: 'Hello to every one!',
+        time: 'Sun Apr 04 2021 18:25:57',
+      };
+      const newMessage2 = {
+        senderName: 'testSender2',
+        senderID: `senderID-${nanoid()}`,
+        receiverName: 'testReceiver2',
+        receiverID: 'receiver-123',
+        roomName: 'testRoom',
+        roomID: town.coveyTownID,
+        content: 'Hello to receiver-123',
+        time: 'Sun Apr 04 2021 18:25:57',
+      };
+      const newNotification1 = {
+        coveyTownID: town.coveyTownID,
+        content:'Notification: testSender1 send you a public message',
+        receiverID: 'Everyone',
+      };
+      const newNotification2  = {
+        coveyTownID: town.coveyTownID,
+        content:'Notification: testSender2 send you a private message',
+        receiverID: 'receiver-123',
+      };
+      town.addTownListener(mockCoveyListener());
+      CoveyTownsStore.getInstance()
+        .createNotification(newMessage1);
+      CoveyTownsStore.getInstance()
+        .createNotification(newMessage2);
+      expect(mockCoveyListenerOtherFns.mock.calls[0][0])
+        .toStrictEqual(newNotification1);
+      expect(mockCoveyListenerOtherFns.mock.calls[1][0])
+        .toStrictEqual(newNotification2);
     });
   });
 });

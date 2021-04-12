@@ -259,8 +259,8 @@ function townSocketAdapter(socket: Socket): CoveyTownListener {
       socket.emit('townClosing');
       socket.disconnect(true);
     },
-    onMessageAnnounce(notificationRequest :NotificationRequest) {
-      socket.emit('sendingAnnouncement', notificationRequest);
+    onMessageNotify(notificationRequest :NotificationRequest) {
+      socket.emit('sendingNotification', notificationRequest);
     },
 
   };
@@ -306,4 +306,7 @@ export function townSubscriptionHandler(socket: Socket): void {
     townController.updatePlayerLocation(s.player, movementData);
   });
 
+  socket.on('sendingNotification', (notificationRequest: NotificationRequest) => {
+    townController.notificationToPlayers(notificationRequest);
+  });
 }

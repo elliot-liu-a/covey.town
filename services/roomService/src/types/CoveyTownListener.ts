@@ -29,7 +29,7 @@ export default interface CoveyTownListener {
    */
   onTownDestroyed(): void;
 
-  onMessageAnnounce(notificationRequest: NotificationRequest): void;
+  onMessageNotify(notificationRequest: NotificationRequest): void;
 
 
 }

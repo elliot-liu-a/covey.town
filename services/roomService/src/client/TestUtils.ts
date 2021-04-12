@@ -5,11 +5,13 @@ import {Socket as ServerSocket} from 'socket.io';
 import {AddressInfo} from 'net';
 import * as http from 'http';
 import { UserLocation } from '../CoveyTypes';
-import { MessageData } from '../types/MessageData';
+import { NotificationRequest} from '../types/NotificationRequest';
+
 
 export type RemoteServerPlayer = {
   location: UserLocation, _userName: string, _id: string
 };
+
 const createdSocketClients: Socket[] = [];
 
 /**
@@ -46,8 +48,7 @@ export function createSocketClient(server: http.Server, sessionToken: string, co
   playerMoved: Promise<RemoteServerPlayer>,
   newPlayerJoined: Promise<RemoteServerPlayer>,
   playerDisconnected: Promise<RemoteServerPlayer>,
-  messageAnnounce: Promise<string>,
-  distributeMessage: Promise<MessageData>,
+  notificationSent: Promise<NotificationRequest>,
 } {
   const address = server.address() as AddressInfo;
   const socket = io(`http://localhost:${address.port}`, {
@@ -79,14 +80,9 @@ export function createSocketClient(server: http.Server, sessionToken: string, co
       resolve(player);
     });
   });
-  const messageAnnouncePromise = new Promise<string>((resolve) => {
-    socket.on('sendingAnnouncement', (content: string) => {
-      resolve(content);
-    });
-  });
-  const distributeMessagePromise = new Promise<MessageData>((resolve) => {
-    socket.on('playerSendMessage', (message: MessageData) => {
-      resolve(message);
+  const notificationSendPromise = new Promise<NotificationRequest>((resolve) => {
+    socket.on('sendingNotification', (notification: NotificationRequest) => {
+      resolve(notification);
     });
   });
   createdSocketClients.push(socket);
@@ -97,8 +93,7 @@ export function createSocketClient(server: http.Server, sessionToken: string, co
     playerMoved: playerMovedPromise,
     newPlayerJoined: newPlayerPromise,
     playerDisconnected: playerDisconnectPromise,
-    messageAnnounce: messageAnnouncePromise,
-    distributeMessage: distributeMessagePromise,
+    notificationSent: notificationSendPromise,
   };
 }
 export function setSessionTokenAndTownID(coveyTownID: string, sessionToken: string, socket: ServerSocket):void {

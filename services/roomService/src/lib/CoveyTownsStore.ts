@@ -1,16 +1,17 @@
 import CoveyTownController from './CoveyTownController';
 import { CoveyTownList } from '../CoveyTypes';
+import {MessageData} from '../types/MessageData';
 
-export interface TownPostMessageRequest {
-  senderName: string,
-  senderID: string,
-  receiverName: string,
-  receiverID: string,
-  roomName: string,
-  roomID: string,
-  content: string,
-  time: string,
-}
+// export interface TownPostMessageRequest {
+//   senderName: string,
+//   senderID: string,
+//   receiverName: string,
+//   receiverID: string,
+//   roomName: string,
+//   roomID: string,
+//   content: string,
+//   time: string,
+// }
 
 function passwordMatches(provided: string, expected: string): boolean {
   if (provided === expected) {
@@ -89,13 +90,13 @@ export default class CoveyTownsStore {
       receiverID: 'Everyone',
     };
     if (existingTown && passwordMatches(coveyTownPassword, existingTown.townUpdatePassword)) {
-      existingTown.announceToPlayers(notificationRequest);
+      existingTown.notificationToPlayers(notificationRequest);
       return true;
     }
     return false;
   }
 
-  createNotification(message: TownPostMessageRequest ):boolean {
+  createNotification(message: MessageData ):boolean {
     const existingTown = this.getControllerForTown(message.roomID);
     let content = '';
     if (message.receiverID === 'Everyone') {
@@ -109,7 +110,7 @@ export default class CoveyTownsStore {
       receiverID: message.receiverID,
     };
     if (existingTown) {
-      existingTown.announceToPlayers(notificationRequest);
+      existingTown.notificationToPlayers(notificationRequest);
       return true;
     }
     return false;

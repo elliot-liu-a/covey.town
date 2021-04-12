@@ -10,7 +10,6 @@ import PlayerSession from '../types/PlayerSession';
 import {townSubscriptionHandler} from '../requestHandlers/CoveyTownRequestHandlers';
 import CoveyTownsStore from './CoveyTownsStore';
 import * as TestUtils from '../client/TestUtils';
-import {MessageData} from '../types/MessageData';
 import {NotificationRequest} from '../types/NotificationRequest';
 
 jest.mock('./TwilioVideo');
@@ -31,18 +30,6 @@ function generateTestLocation(): UserLocation {
   };
 }
 
-function generateTestMessage(): MessageData {
-  return {
-    senderName: 'testSender',
-    senderID: `senderID-${nanoid()}`,
-    receiverName: 'testReceiver',
-    receiverID: `receiverID-${nanoid()}`,
-    roomName: 'testRoom',
-    roomID: `roomID-${nanoid()}`,
-    content: 'Hello',
-    time: 'Sun Apr 04 2021 18:25:57',
-  };
-}
 
 describe('CoveyTownController', () => {
   beforeEach(() => {
@@ -108,25 +95,19 @@ describe('CoveyTownController', () => {
 
     });
 
-    // it('should notify added listeners of distributing message when distributePlayerMessage is called', async () => {
-    //   const newMessage = generateTestMessage();
 
-    //   mockListeners.forEach(listener => testingTown.addTownListener(listener));
-    //   testingTown.distributePlayerMessage(newMessage);
-    //   mockListeners.forEach(listener => expect(listener.onDistributeMessage).toBeCalled());
-    // });
-
-    it('should notify added listeners of announcing message when announceToPlayers is called', async () => {
+    // newly added test for notificationToPlayers
+    it('should notify added listeners of notification when notificationToPlayers is called', async () => {
       const newAnnouncement = {
         coveyTownID: testingTown.coveyTownID,
         content:'testAnnoucement',
         receiverID: 'Everyone',
       };
-
       mockListeners.forEach(listener => testingTown.addTownListener(listener));
-      testingTown.announceToPlayers(newAnnouncement);
-      mockListeners.forEach(listener => expect(listener.onMessageAnnounce).toBeCalled());
+      testingTown.notificationToPlayers(newAnnouncement);
+      mockListeners.forEach(listener => expect(listener.onMessageNotify).toBeCalled());
     });
+
 
 
     it('should not notify removed listeners of player movement when updatePlayerLocation is called', async () => {
@@ -174,28 +155,18 @@ describe('CoveyTownController', () => {
 
     });
 
-    // it('should not notify removed listeners of distributing message when distributePlayerMessage is called', async () => {
-    //   const newMessage = generateTestMessage();
-
-    //   mockListeners.forEach(listener => testingTown.addTownListener(listener));
-    //   const listenerRemoved = mockListeners[1];
-    //   testingTown.removeTownListener(listenerRemoved);
-    //   testingTown.distributePlayerMessage(newMessage);
-    //   expect(listenerRemoved.onDistributeMessage).not.toBeCalled();
-    // });
-
-    it('should not notify removed listeners of announcing message when announceToPlayers is called', async () => {
+    // newly added test for notificationToPlayers
+    it('should not notify removed listeners of notification when notificationToPlayers is called', async () => {
       const newAnnouncement = {
         coveyTownID: testingTown.coveyTownID,
         content:'testAnnoucement',
         receiverID: 'Everyone',
       };
-
       mockListeners.forEach(listener => testingTown.addTownListener(listener));
       const listenerRemoved = mockListeners[1];
       testingTown.removeTownListener(listenerRemoved);
-      testingTown.announceToPlayers(newAnnouncement);
-      expect(listenerRemoved.onMessageAnnounce).not.toBeCalled();
+      testingTown.notificationToPlayers(newAnnouncement);
+      expect(listenerRemoved.onMessageNotify).not.toBeCalled();
     });
   });
   describe('townSubscriptionHandler', () => {
@@ -203,16 +174,14 @@ describe('CoveyTownController', () => {
     let testingTown: CoveyTownController;
     let player: Player;
     let session: PlayerSession;
-    let newMessage: MessageData;
-    let content: NotificationRequest;
+    let notification: NotificationRequest;
     beforeEach(async () => {
       const townName = `connectPlayerSocket tests ${nanoid()}`;
       testingTown = CoveyTownsStore.getInstance().createTown(townName, false);
       mockReset(mockSocket);
       player = new Player('test player');
       session = await testingTown.addPlayer(player);
-      newMessage = generateTestMessage();
-      content = {
+      notification = {
         coveyTownID: testingTown.coveyTownID,
         content:'testAnnoucement',
         receiverID: 'Everyone',
@@ -256,20 +225,13 @@ describe('CoveyTownController', () => {
         expect(mockSocket.disconnect).toBeCalledWith(true);
       });
 
-
-      it('should add a town listener, which should emit "sendingAnnouncement" to the socket when a player sends an announcement', async () => {
+      // newly added test for sendingNotification socket
+      it('should add a town listener, which should emit "sendingNotification" to the socket when a player sends an announcement', async () => {
         TestUtils.setSessionTokenAndTownID(testingTown.coveyTownID, session.sessionToken, mockSocket);
         townSubscriptionHandler(mockSocket);
-        testingTown.announceToPlayers(content);
-        expect(mockSocket.emit).toBeCalledWith('sendingAnnouncement', content);
+        testingTown.notificationToPlayers(notification);
+        expect(mockSocket.emit).toBeCalledWith('sendingNotification', notification);
       });
-      // it('should add a town listener, which should emit "playerSendMessage" to the socket when a player sends a message', async () => {
-      //   TestUtils.setSessionTokenAndTownID(testingTown.coveyTownID, session.sessionToken, mockSocket);
-      //   townSubscriptionHandler(mockSocket);
-      //   testingTown.distributePlayerMessage(newMessage);
-      //   expect(mockSocket.emit).toBeCalledWith('playerSendMessage', newMessage);
-      // });
-
 
       describe('when a socket disconnect event is fired', () => {
         it('should remove the town listener for that socket, and stop sending events to it', async () => {

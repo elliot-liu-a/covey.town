@@ -196,7 +196,7 @@ async function GameController(initData: TownJoinResponse,
   socket.on('disconnect', () => {
     dispatchAppUpdate({ action: 'disconnect' });
   });
-  socket.on('sendingAnnouncement',(notificationRequest: NotificationRequest) =>{
+  socket.on('sendingNotification',(notificationRequest: NotificationRequest) =>{
     const {content} = notificationRequest;
     if(notificationRequest.coveyTownID === video.coveyTownID){
       if(notificationRequest.receiverID === gamePlayerID){       

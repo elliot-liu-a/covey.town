@@ -144,8 +144,8 @@ export default class CoveyTownController {
     this._listeners = this._listeners.filter((v) => v !== listener);
   }
 
-  announceToPlayers(notificationRequest: NotificationRequest): void {
-    this._listeners.forEach((listener) => listener.onMessageAnnounce(notificationRequest));
+  notificationToPlayers(notificationRequest: NotificationRequest): void {
+    this._listeners.forEach((listener) => listener.onMessageNotify(notificationRequest));
   }
 
 
