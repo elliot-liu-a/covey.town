@@ -1,7 +1,7 @@
 # Design
 
 ## New Application Architecture
-![High Level Architecture](docs/NewHighLevelArchitecture-2.png)
+![High Level Architecture](docs/CoveyTownCodeChange.png)
 
 ## UI changes
 * User will be able to publish an announcement, send message, and view chat history. <br/>
